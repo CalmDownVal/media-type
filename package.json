@@ -1,0 +1,19 @@
+{
+	"name": "@calmdownval/mime",
+	"version": "1.0.1",
+	"main": "src/parser.mjs",
+	"license": "GPL-3.0-or-later",
+	"description": "MIME type parser",
+	"keywords": [
+		"MIME",
+		"ContentType",
+		"parser"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vaclavlahuta/mime.git"
+	},
+	"engines": {
+		"node": ">=8.15.0"
+	}
+}

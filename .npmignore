@@ -1,4 +1,5 @@
 .eslintrc.json
 .gitignore
 other
+script
 node_modules

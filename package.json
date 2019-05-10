@@ -1,6 +1,7 @@
 {
 	"name": "@calmdownval/mime",
 	"version": "1.0.1",
+	"type": "module",
 	"main": "src/parser.mjs",
 	"license": "GPL-3.0-or-later",
 	"description": "MIME type parser",
@@ -15,5 +16,11 @@
 	},
 	"engines": {
 		"node": ">=8.15.0"
+	},
+	"devDependencies": {
+		"mocha": "^6.1.4"
+	},
+	"scripts": {
+		"test": "NODE_OPTIONS=\"--experimental-modules\" mocha --delay script/test.esm.js"
 	}
 }

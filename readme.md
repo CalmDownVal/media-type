@@ -3,6 +3,13 @@
 Please refer to [Node's documentation](https://nodejs.org/api/esm.html#esm_enabling) to read
 more on how to enable this functionality in your environment.**
 
+Media-type parser - parses out individual parts of the syntax and returns a data structure
+fully describing the type. Validates top-level types, trees and suffixes, supports
+multiple parameters and comments.
+
+Does **NOT** check sub-types against the
+[IANA media-type registry](https://www.iana.org/assignments/media-types/media-types.xhtml).
+
 ## Installation
 ```
 npm i --save @calmdownval/mime
@@ -10,11 +17,12 @@ npm i --save @calmdownval/mime
 
 ## Usage
 ```js
-import parse from '@calmdownval/mime';
+import parseMIME from '@calmdownval/mime';
 
-console.log( parse('application/vnd.api+json; charset=utf-8') );
+// the library directly exports the parse function
+parseMIME('application/vnd.api+json; charset=utf-8');
 ```
-outputs:
+parse output:
 ```js
 {
   type: {
@@ -26,8 +34,7 @@ outputs:
     tree: 'vnd',
     suffix: 'json'
   },
-  // since parameters are case-insensitive
-  // they will always be lowercase
+  // parameters are case-insensitive and will always be lowercase
   parameters: {
     charset: 'utf-8'
   }

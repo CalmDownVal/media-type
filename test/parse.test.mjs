@@ -1,10 +1,7 @@
 /* eslint-env mocha */
 
 import { ok, strictEqual, deepStrictEqual } from 'assert';
-import parse from '../src/parser.mjs';
-
-const NO_MATCH = 'did not match a valid type';
-const INVALID_MATCH = 'matched invalid type';
+import { parse } from '../src/index.mjs';
 
 describe('top-level types', () =>
 {
@@ -13,8 +10,7 @@ describe('top-level types', () =>
 		const result = parse('example/sub-type');
 		strictEqual(
 			result && result.type.name,
-			'example',
-			NO_MATCH);
+			'example');
 	});
 
 	it('should match extension types', () =>
@@ -22,8 +18,7 @@ describe('top-level types', () =>
 		const result = parse('x-some-type/sub-type');
 		strictEqual(
 			result && result.type.isExtension,
-			true,
-			NO_MATCH);
+			true);
 	});
 
 	it('should not match invalid types', () =>
@@ -31,8 +26,7 @@ describe('top-level types', () =>
 		const result = parse('invalid-type/sub-type');
 		strictEqual(
 			result,
-			null,
-			INVALID_MATCH);
+			null);
 	});
 });
 
@@ -43,8 +37,7 @@ describe('sub-types', () =>
 		const result = parse('example/sub-type');
 		strictEqual(
 			result && result.subType.name,
-			'sub-type',
-			NO_MATCH);
+			'sub-type');
 	});
 
 	it('should recognize valid tree prefixes', () =>
@@ -52,38 +45,32 @@ describe('sub-types', () =>
 		const result1 = parse('example/vnd.sub-type');
 		strictEqual(
 			result1 && result1.subType.tree,
-			'vnd',
-			NO_MATCH);
+			'vnd');
 
 		const result2 = parse('example/prs.sub-type');
 		strictEqual(
 			result2 && result2.subType.tree,
-			'prs',
-			NO_MATCH);
+			'prs');
 
 		const result3 = parse('example/xxx.sub-type');
 		strictEqual(
 			result3 && result3.subType.tree,
-			null,
-			INVALID_MATCH);
+			null);
 	});
 
 	it('should recognize suffixes', () =>
 	{
 		const result1 = parse('example/sub-type+xml');
 		strictEqual(result1 && result1.subType.suffix,
-			'xml',
-			NO_MATCH);
+			'xml');
 
 		const result2 = parse('example/sub-type');
 		strictEqual(result2 && result2.subType.suffix,
-			null,
-			NO_MATCH);
+			null);
 
 		const result3 = parse('example/sub-type+bad');
 		strictEqual(result3,
-			null,
-			INVALID_MATCH);
+			null);
 	});
 });
 
@@ -94,39 +81,40 @@ describe('parameters', () =>
 		const result = parse('example/sub-type; ChArSeT=utf-8');
 		deepStrictEqual(
 			result && result.parameters,
-			{ charset : 'utf-8' },
-			NO_MATCH);
+			{ charset : 'utf-8' });
 	});
 
 	it('should handle comments', () =>
 	{
 		const result = parse('example/sub-type; ChArSeT=utf-8 (Im a comment!)');
-		ok(result, NO_MATCH);
+		ok(result);
 	});
 });
 
-it('should parse a complex type', () =>
+describe('final test', () =>
 {
-	const result = parse('application/vnd.openstreetmap.data+xml; charset=utf-8; FoO=BaR (hello world)');
-	deepStrictEqual(
-		result,
-		{
-			type :
+	it('should parse a complex type', () =>
+	{
+		const result = parse('application/vnd.openstreetmap.data+xml; charset=utf-8; NeEdS="To (be) quoteD" (hello world)');
+		deepStrictEqual(
+			result,
 			{
-				name : 'application',
-				isExtension : false
-			},
-			subType :
-			{
-				name : 'vnd.openstreetmap.data+xml',
-				tree : 'vnd',
-				suffix : 'xml'
-			},
-			parameters :
-			{
-				charset : 'utf-8',
-				foo : 'BaR'
-			}
-		},
-		NO_MATCH);
+				type :
+				{
+					name : 'application',
+					isExtension : false
+				},
+				subType :
+				{
+					name : 'vnd.openstreetmap.data+xml',
+					tree : 'vnd',
+					suffix : 'xml'
+				},
+				parameters :
+				{
+					charset : 'utf-8',
+					needs : 'To (be) quoteD'
+				}
+			});
+	});
 });

@@ -1,7 +1,8 @@
-import parse from './parser.mjs';
+import { parse, stringify } from './parser.mjs';
 import ContentMap from './ContentMap.mjs';
 
 export {
 	parse,
+	stringify,
 	ContentMap
 };

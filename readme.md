@@ -17,10 +17,11 @@ npm i --save @calmdownval/mime
 
 ## Usage
 ```js
-import parseMIME from '@calmdownval/mime';
+import { parse } from '@calmdownval/mime';
 
-// the library directly exports the parse function
-parseMIME('application/vnd.api+json; charset=utf-8');
+// no options needed, parses the type into a nested object structure
+// returns null for invalid mime types
+parse('application/vnd.api+json; charset=utf-8');
 ```
 parse output:
 ```js

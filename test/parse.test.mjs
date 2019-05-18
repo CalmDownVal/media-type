@@ -23,10 +23,7 @@ describe('top-level types', () =>
 
 	it('should not match invalid types', () =>
 	{
-		const result = parse('invalid-type/sub-type');
-		strictEqual(
-			result,
-			null);
+		strictEqual(parse('invalid-type/sub-type'), null);
 	});
 });
 
@@ -68,9 +65,7 @@ describe('sub-types', () =>
 		strictEqual(result2 && result2.subType.suffix,
 			null);
 
-		const result3 = parse('example/sub-type+bad');
-		strictEqual(result3,
-			null);
+		strictEqual(parse('example/sub-type+bad'), null);
 	});
 });
 
@@ -86,8 +81,35 @@ describe('parameters', () =>
 
 	it('should handle comments', () =>
 	{
-		const result = parse('example/sub-type; ChArSeT=utf-8 (Im a comment!)');
-		ok(result);
+		ok(parse('example/sub-type; ChArSeT=utf-8 (Im a comment!)'));
+	});
+});
+
+describe('pattern wildcards', () =>
+{
+	it('should reject wildcards by default', () =>
+	{
+		strictEqual(parse('*/javascript'), null);
+	});
+
+	it('should parse wildcards when explicitly enabled', () =>
+	{
+		deepStrictEqual(
+			parse('*/*+*', true),
+			{
+				type :
+				{
+					name : '*',
+					isExtension : false
+				},
+				subType :
+				{
+					name : '*+*',
+					tree : null,
+					suffix : '*'
+				},
+				parameters : {}
+			});
 	});
 });
 
@@ -95,9 +117,8 @@ describe('final test', () =>
 {
 	it('should parse a complex type', () =>
 	{
-		const result = parse('application/vnd.openstreetmap.data+xml; charset=utf-8; NeEdS="To (be) quoteD" (hello world)');
 		deepStrictEqual(
-			result,
+			parse('application/vnd.openstreetmap.data+xml; charset=utf-8; NeEdS="To (be) quoteD" (hello world)'),
 			{
 				type :
 				{

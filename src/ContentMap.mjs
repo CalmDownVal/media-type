@@ -10,7 +10,7 @@ function coerce(obj)
 	let type = typeof obj;
 	if (type === 'string')
 	{
-		obj = parse(obj);
+		obj = parse(obj, true);
 		type = 'object';
 	}
 
@@ -52,30 +52,28 @@ function match(a, b)
 	b = b.subType;
 
 	const sub = compare(a.nameWithoutSuffix, b.nameWithoutSuffix);
-	if (a.suffix && b.suffix)
+	if (a.suffix === b.suffix)
 	{
-		return a.suffix === b.suffix
-			? top + sub + M_EXACT
-			: M_NONE;
+		return top + sub + M_EXACT;
+	}
+	else if (a.suffix && b.suffix)
+	{
+		return M_NONE;
 	}
 
-	if (sub !== M_NONE)
-	{
-		return top + sub;
-	}
-
-	let suffix = M_NONE;
+	let suffix;
 	if (a.suffix)
 	{
 		suffix = Math.min(compare(a.suffix, b.name), M_MATCH);
 	}
-
-	if (b.suffix)
+	else
 	{
 		suffix = Math.min(compare(b.suffix, a.name), M_MATCH);
 	}
 
-	return top + sub + suffix;
+	return suffix === M_NONE
+		? M_NONE
+		: top + sub + suffix;
 }
 
 export default class ContentMap
@@ -91,7 +89,6 @@ export default class ContentMap
 		{
 			if (this._find(mime) === -1)
 			{
-				console.log('ADDED');
 				this.__data.push(mime, value);
 			}
 		}

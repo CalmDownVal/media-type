@@ -1,4 +1,4 @@
-const RE_MIME = /^([a-z]{4,11}|([xX])-[a-zA-Z0-9!#$&^_-]{0,62}|\*)\/((?:(vnd|prs)\.[a-zA-Z0-9!#$&^_.-]{0,60}|[a-zA-Z0-9][a-zA-Z0-9!#$&^_.-]{0,63}|\*)(?:\+([a-z]{3,11}))?)([\s;(]|$)/;
+const RE_MIME = /^([a-z]{4,11}|([xX])-[a-zA-Z0-9!#$&^_-]{0,62}|\*)\/((?:(vnd|prs)\.[a-zA-Z0-9!#$&^_.-]{0,60}|[a-zA-Z0-9][a-zA-Z0-9!#$&^_.-]{0,63}|\*)(?:\+([a-z]{3,11}|\*))?)([\s;(]|$)/;
 const RE_PARAM = /\s*((?:(?![()[\]<>\\/@,;"?=\s])[!-~])+)=(?:"([^"]+)"|((?:(?![()[\]<>\\/@,;"?=\s])[!-~])+))([\s;(]|$)/g;
 const RE_QUOTE = /[()[\]<>\\/@,;"?=\s]/;
 
@@ -16,10 +16,7 @@ const topTypes =
 
 	// composite-type
 	message : true,
-	multipart : true,
-
-	// matching
-	'*': true
+	multipart : true
 };
 
 const trees =
@@ -38,13 +35,10 @@ const suffixes =
 	wbxml : true,
 	zip : true,
 	gzip : true,
-	cbor : true,
-
-	// matching
-	'*': true
+	cbor : true
 };
 
-export function parse(str)
+export function parse(str, allowWildcards = false)
 {
 	const mime = RE_MIME.exec(str);
 	if (!mime)
@@ -58,7 +52,7 @@ export function parse(str)
 		isExtension : !!mime[2]
 	};
 
-	if (!type.isExtension && !topTypes[type.name])
+	if (!type.isExtension && !topTypes[type.name] && !(type.name === '*' && allowWildcards))
 	{
 		return null;
 	}
@@ -70,7 +64,8 @@ export function parse(str)
 		suffix : mime[5] || null
 	};
 
-	if ((subType.tree && !trees[subType.tree]) || (subType.suffix && !suffixes[subType.suffix]))
+	if ((subType.tree && !trees[subType.tree]) ||
+		(subType.suffix && !suffixes[subType.suffix] && !(subType.suffix === '*' && allowWildcards)))
 	{
 		return null;
 	}

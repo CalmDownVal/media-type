@@ -11,6 +11,7 @@ describe('matching types', () =>
 	map.add('text/*', 3);
 	map.add('*/json', 4);
 	map.add('image/png', 5);
+	map.add('text/document+xml', 6);
 
 	it('should prefer exact match', () =>
 	{
@@ -19,5 +20,12 @@ describe('matching types', () =>
 		strictEqual(map.match('text/whatever'), 3);
 		strictEqual(map.match('application/json'), 4);
 		strictEqual(map.match('image/png'), 5);
+	});
+
+	it('should sort multiple matches by importance', () =>
+	{
+		deepStrictEqual(
+			map.matchAll('text/document+xml'),
+			[ 6, 1, 2, 3 ]);
 	});
 });

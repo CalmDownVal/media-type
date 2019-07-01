@@ -54,7 +54,9 @@ function match(a, b)
 	const sub = compare(a.nameWithoutSuffix, b.nameWithoutSuffix);
 	if (a.suffix === b.suffix)
 	{
-		return top + sub + M_EXACT;
+		return a.suffix || sub !== M_NONE
+			? top + sub + M_EXACT
+			: M_NONE;
 	}
 	else if (a.suffix && b.suffix)
 	{

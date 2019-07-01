@@ -29,3 +29,16 @@ describe('matching types', () =>
 			[ 6, 1, 2, 3 ]);
 	});
 });
+
+describe('no suffix information', () =>
+{
+	const map = new ContentMap();
+	map.add('*/json', 1);
+
+	it('should not match anything', () =>
+	{
+		strictEqual(
+			map.match('text/plain'),
+			null);
+	});
+});

@@ -11,6 +11,6 @@ const { sync : globSync } = require('glob');
 
 (async () =>
 {
-	await Promise.all( globSync('test/*.mjs').map(match => import( '../' + match )) );
+	await Promise.all( globSync('test/*.test.mjs').map(match => import( '../' + match )) );
 	run();
 })();

@@ -18,6 +18,7 @@
 		"no-console": "warn",
 		"no-shadow": "error",
 		"eqeqeq": "error",
+		"curly": "error",
 		"one-var": [
 			"error",
 			"never"

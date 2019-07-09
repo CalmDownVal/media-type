@@ -1,3 +1,4 @@
+import ContentMapIterator from './ContentMapIterator.mjs';
 import { parse } from './parser.mjs';
 
 const M_NONE = 0;
@@ -80,28 +81,40 @@ function match(a, b)
 
 export default class ContentMap
 {
+	#data;
+
 	constructor()
 	{
-		this.__data = [];
+		this.#data = [];
+	}
+
+	get size()
+	{
+		return this.#data.length >>> 1;
+	}
+
+	[Symbol.iterator]()
+	{
+		return new ContentMapIterator(this.#data);
 	}
 
 	add(mime, value)
 	{
 		if ((mime = coerce(mime)))
 		{
-			if (this._find(mime) === -1)
+			if (this.indexOf(mime) === -1)
 			{
-				this.__data.push(mime, value);
+				this.#data.push(mime, value);
 			}
 		}
 	}
 
 	remove(mime)
 	{
-		const i = this._find(coerce(mime));
+		const i = this.indexOf(coerce(mime));
 		if (i !== -1)
 		{
-			this.__data.splice(i, 2);
+			this.#data.splice(i, 2);
 			return true;
 		}
 
@@ -118,12 +131,12 @@ export default class ContentMap
 		let bestMatch = null;
 		let bestLevel = 0;
 
-		for (let i = 0; i < this.__data.length; i += 2)
+		for (let i = 0; i < this.#data.length; i += 2)
 		{
-			const level = match(this.__data[i], mime);
+			const level = match(this.#data[i], mime);
 			if (level > bestLevel)
 			{
-				bestMatch = this.__data[i + 1];
+				bestMatch = this.#data[i + 1];
 				bestLevel = level;
 
 				if (level === M_FULL)
@@ -150,19 +163,19 @@ export default class ContentMap
 			return list;
 		}
 
-		for (let i = 0; i < this.__data.length; i += 2)
+		for (let i = 0; i < this.#data.length; i += 2)
 		{
-			switch (match(this.__data[i], mime))
+			switch (match(this.#data[i], mime))
 			{
 				case M_NONE:
 					break;
 
 				case M_FULL:
-					list.unshift(this.__data[i + 1]);
+					list.unshift(this.#data[i + 1]);
 					break;
 
 				default:
-					list.push(this.__data[i + 1]);
+					list.push(this.#data[i + 1]);
 					break;
 			}
 		}
@@ -170,13 +183,13 @@ export default class ContentMap
 		return list;
 	}
 
-	_find(mime)
+	indexOf(mime)
 	{
 		if (mime)
 		{
-			for (let i = 0; i < this.__data.length; i += 2)
+			for (let i = 0; i < this.#data.length; i += 2)
 			{
-				if (equals(this.__data[i], mime))
+				if (equals(this.#data[i], mime))
 				{
 					return i;
 				}

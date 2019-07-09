@@ -42,3 +42,31 @@ describe('no suffix information', () =>
 			null);
 	});
 });
+
+describe('iterable protocol', () =>
+{
+	const map = new ContentMap();
+	map.add('*/json', 1);
+	map.add('text/plain', 2);
+
+	it('should give the correct size', () =>
+	{
+		// this is not a part of the iterable protocol, but is very handy nontheless
+		strictEqual(map.size, 2);
+	});
+
+	it('should be iterable', () =>
+	{
+		const values = [];
+		for (const value of map)
+		{
+			values.push(value.slice(0, 2));
+		}
+
+		deepStrictEqual(values,
+			[
+				[ '*/json', 1 ],
+				[ 'text/plain', 2 ]
+			]);
+	});
+});

@@ -1,5 +1,5 @@
 # MIME
-**This module uses the ES modules feature and requires Node v8.15.0+.
+**This module uses ES modules and private class fields features and requires Node v12.0.0+.
 Please refer to [Node's documentation](https://nodejs.org/api/esm.html#esm_enabling) to read
 more on how to enable this functionality in your environment.**
 

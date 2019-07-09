@@ -5,7 +5,8 @@
 		"node": true
 	},
 	"globals": {
-		"Promise": "readonly"
+		"Promise": "readonly",
+		"Symbol": "readonly"
 	},
 	"parser": "babel-eslint",
 	"parserOptions": {

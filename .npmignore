@@ -1,5 +1,4 @@
+other/
+test/
+script/
 .eslintrc.json
-.gitignore
-other
-script
-node_modules

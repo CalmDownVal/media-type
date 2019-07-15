@@ -101,11 +101,24 @@ function quote(str)
 
 export function stringify(mime)
 {
-	let str = `${mime.type.name}/${mime.subType.name}`;
-	for (const key in mime.parameters)
+	switch (typeof mime)
 	{
-		str += `; ${key}=${quote(mime.parameters[key])}`;
-	}
+		case 'string':
+			return mime;
 
-	return str;
+		case 'object':
+			if (mime && mime.type && mime.subType)
+			{
+				let str = `${mime.type.name}/${mime.subType.name}`;
+				for (const key in mime.parameters)
+				{
+					str += `; ${key}=${quote(mime.parameters[key])}`;
+				}
+				return str;
+			}
+			// fall through
+
+		default:
+			throw new Error('Invalid MIME-Type object.');
+	}
 }

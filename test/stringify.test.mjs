@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-import { strictEqual } from 'assert';
+import { strictEqual, throws } from 'assert';
 import { stringify } from '../src/index.mjs';
 
 describe('stringify', () =>
@@ -30,5 +30,18 @@ describe('stringify', () =>
 		strictEqual(
 			stringify(mime),
 			'application/vnd.openstreetmap.data+xml; charset=utf-8; needs="To (be) quoteD"');
+	});
+
+	it('passes string form through', () =>
+	{
+		strictEqual(
+			stringify('text/plain'),
+			'text/plain');
+	});
+
+	it('throws on invalid input', () =>
+	{
+		throws(() => stringify(123));
+		throws(() => stringify({ type : { name : 'missing subType' } }));
 	});
 });

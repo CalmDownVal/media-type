@@ -11,7 +11,7 @@ Does **NOT** check sub-types against the
 [IANA media-type registry](https://www.iana.org/assignments/media-types/media-types.xhtml).
 
 ## Installation
-```
+```sh
 npm i --save @calmdownval/mime
 ```
 

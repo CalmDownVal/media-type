@@ -1,4 +1,4 @@
-import ContentMapIterator from './ContentMapIterator.mjs';
+import { ContentMapIterator } from './ContentMapIterator.mjs';
 import { parse } from './parser.mjs';
 
 const M_NONE = 0;
@@ -79,7 +79,7 @@ function match(a, b)
 		: top + sub + suffix;
 }
 
-export default class ContentMap
+export class ContentMap
 {
 	#data;
 	#indexOf = mime =>

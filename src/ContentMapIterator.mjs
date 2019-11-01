@@ -1,6 +1,6 @@
 import { stringify } from './parser.mjs';
 
-export default class ContentMapIterator
+export class ContentMapIterator
 {
 	#collection;
 	#position;

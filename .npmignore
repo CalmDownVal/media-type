@@ -1,3 +1,6 @@
-test/
+coverage/
 script/
-.eslintrc.json
+test/
+.editorconfig
+.env
+.eslintrc

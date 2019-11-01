@@ -1,5 +1,5 @@
 import { parse, stringify } from './parser.mjs';
-import ContentMap from './ContentMap.mjs';
+import { ContentMap } from './ContentMap.mjs';
 
 export {
 	parse,

@@ -1,29 +1,35 @@
-# MIME
-**This module uses ES modules and private class fields features and requires Node v12.0.0+.
-Please refer to [Node's documentation](https://nodejs.org/api/esm.html#esm_enabling) to read
-more on how to enable this functionality in your environment.**
+# Media Type parser
 
-Media-type parser - parses out individual parts of the syntax and returns a data structure
-fully describing the type. Validates top-level types, trees and suffixes, supports
-multiple parameters and comments.
+**This module uses ESM import/export and requires Node v8.15.0+ with the `--experimental-modules`
+flag. Please see [Node's documentation](https://nodejs.org/api/esm.html#esm_enabling)
+for details.**
 
-Does **NOT** check sub-types against the
-[IANA media-type registry](https://www.iana.org/assignments/media-types/media-types.xhtml).
+Parses out individual parts of the media type syntax and returns a data structure fully describing
+the type. Validates top-level types, trees and suffixes, supports multiple parameters and comments.
+
+See [RFC 2046](https://tools.ietf.org/html/rfc2046) for details of the syntax and its rules.
+This library *does not* yet support any extensions such as
+[RFC 2231](https://tools.ietf.org/html/rfc2231) and it *does not* check sub-types against the
+[IANA media-type registry](https://www.iana.org/assignments/media-types/media-types.xhtml) either.
 
 ## Installation
+
 ```sh
-npm i --save @calmdownval/mime
+npm i --save @calmdownval/media-type
 ```
 
 ## Usage
+
 ```js
-import { parse } from '@calmdownval/mime';
+import { parse } from '@calmdownval/media-type';
 
 // no options needed, parses the type into a nested object structure
-// returns null for invalid mime types
+// returns null for invalid media types
 parse('application/vnd.api+json; charset=utf-8');
 ```
+
 parse output:
+
 ```js
 {
   type: {
@@ -35,7 +41,7 @@ parse output:
     tree: 'vnd',
     suffix: 'json'
   },
-  // parameters are case-insensitive and will always be lowercase
+  // parameters are case-insensitive, output is always lowercased
   parameters: {
     charset: 'utf-8'
   }

@@ -4,7 +4,7 @@ import { parse } from './parser.mjs';
 const M_NONE = 0;
 const M_MATCH = 1;
 const M_EXACT = 2;
-const M_FULL = 3 * M_EXACT;
+const M_FULL = 6;
 
 function coerce(obj)
 {
@@ -46,7 +46,7 @@ function match(a, b)
 	const top = compare(a.type.name, b.type.name);
 	if (top === M_NONE)
 	{
-		return 0;
+		return M_NONE;
 	}
 
 	a = a.subType;
@@ -64,15 +64,12 @@ function match(a, b)
 		return M_NONE;
 	}
 
-	let suffix;
-	if (a.suffix)
-	{
-		suffix = Math.min(compare(a.suffix, b.name), M_MATCH);
-	}
-	else
-	{
-		suffix = Math.min(compare(b.suffix, a.name), M_MATCH);
-	}
+	const suffix = Math.min(
+		a.suffix
+			? compare(a.suffix, b.name)
+			: compare(b.suffix, a.name),
+		M_MATCH
+	);
 
 	return suffix === M_NONE
 		? M_NONE
@@ -81,46 +78,33 @@ function match(a, b)
 
 export class ContentMap
 {
-	#data;
-	#indexOf = mime =>
-	{
-		for (let i = 0; i < this.#data.length; i += 2)
-		{
-			if (equals(this.#data[i], mime))
-			{
-				return i;
-			}
-		}
-		return -1;
-	};
-
 	constructor()
 	{
-		this.#data = [];
+		this.data = [];
 	}
 
 	get size()
 	{
-		return this.#data.length >>> 1;
+		return this.data.length >>> 1;
 	}
 
 	[Symbol.iterator]()
 	{
-		return new ContentMapIterator(this.#data);
+		return new ContentMapIterator(this.data);
 	}
 
-	get(mime)
+	get(type)
 	{
 		let bestMatch;
-		if ((mime = coerce(mime)))
+		if ((type = coerce(type)))
 		{
 			let bestLevel = 0;
-			for (let i = 0; i < this.#data.length; i += 2)
+			for (let i = 0; i < this.data.length; i += 2)
 			{
-				const level = match(this.#data[i], mime);
+				const level = match(this.data[i], type);
 				if (level > bestLevel)
 				{
-					bestMatch = this.#data[i + 1];
+					bestMatch = this.data[i + 1];
 					bestLevel = level;
 
 					if (level === M_FULL)
@@ -133,24 +117,24 @@ export class ContentMap
 		return bestMatch;
 	}
 
-	getAll(mime)
+	getAll(type)
 	{
 		const list = [];
-		if ((mime = coerce(mime)))
+		if ((type = coerce(type)))
 		{
-			for (let i = 0; i < this.#data.length; i += 2)
+			for (let i = 0; i < this.data.length; i += 2)
 			{
-				switch (match(this.#data[i], mime))
+				switch (match(this.data[i], type))
 				{
 					case M_NONE:
 						break;
 
 					case M_FULL:
-						list.unshift(this.#data[i + 1]);
+						list.unshift(this.data[i + 1]);
 						break;
 
 					default:
-						list.push(this.#data[i + 1]);
+						list.push(this.data[i + 1]);
 						break;
 				}
 			}
@@ -158,13 +142,13 @@ export class ContentMap
 		return list;
 	}
 
-	has(mime)
+	has(type)
 	{
-		if ((mime = coerce(mime)))
+		if ((type = coerce(type)))
 		{
-			for (let i = 0; i < this.#data.length; i += 2)
+			for (let i = 0; i < this.data.length; i += 2)
 			{
-				if (match(this.#data[i], mime))
+				if (match(this.data[i], type))
 				{
 					return true;
 				}
@@ -173,28 +157,40 @@ export class ContentMap
 		return false;
 	}
 
-	set(mime, value)
+	set(type, value)
 	{
-		if ((mime = coerce(mime)))
+		if ((type = coerce(type)))
 		{
-			if (this.#indexOf(mime) === -1)
+			if (this.indexOf(type) === -1)
 			{
-				this.#data.push(mime, value);
+				this.data.push(type, value);
 			}
 		}
 	}
 
-	delete(mime)
+	delete(type)
 	{
-		if ((mime = coerce(mime)))
+		if ((type = coerce(type)))
 		{
-			const i = this.indexOf(mime);
+			const i = this.indexOf(type);
 			if (i !== -1)
 			{
-				this.#data.splice(i, 2);
+				this.data.splice(i, 2);
 				return true;
 			}
 		}
 		return false;
+	}
+
+	indexOf(type)
+	{
+		for (let i = 0; i < this.data.length; i += 2)
+		{
+			if (equals(this.data[i], type))
+			{
+				return i;
+			}
+		}
+		return -1;
 	}
 }

@@ -7,7 +7,7 @@ describe('stringify', () =>
 {
 	it('should convert back to string', () =>
 	{
-		const mime =
+		const media =
 		{
 			type :
 			{
@@ -28,7 +28,7 @@ describe('stringify', () =>
 		};
 
 		strictEqual(
-			stringify(mime),
+			stringify(media),
 			'application/vnd.openstreetmap.data+xml; charset=utf-8; needs="To (be) quoteD"');
 	});
 

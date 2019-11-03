@@ -4,3 +4,4 @@ test/
 .editorconfig
 .env
 .eslintrc
+tslint.json

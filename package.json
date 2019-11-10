@@ -31,8 +31,7 @@
 	},
 	"scripts": {
 		"lint": "eslint src/**/*.mjs && tslint src/index.d.ts",
-		"test": "cross-env NODE_OPTIONS=\"--experimental-modules\" mocha --delay script/mocha.cjs",
-		"test:coverage": "cross-env NODE_OPTIONS=\"--experimental-modules\" c8 --clean --check-coverage mocha --delay script/mocha.cjs",
-		"coverage": "npm run test:coverage && c8 report --reporter=lcovonly --include=**/src/**"
+		"test": "cross-env NODE_OPTIONS=\"--experimental-modules\" c8 --clean --check-coverage mocha --delay script/mocha.cjs",
+		"coverage": "npm run test && c8 report --reporter=lcovonly --include=src/** && node script/coverage.cjs"
 	}
 }

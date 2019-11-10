@@ -1,5 +1,8 @@
 # Media Type parser
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fde997ed76e44d4ba0ec46ae9071810c)](https://www.codacy.com/manual/vaclavlahuta/media-type?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vaclavlahuta/media-type&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/fde997ed76e44d4ba0ec46ae9071810c)](https://www.codacy.com/manual/vaclavlahuta/media-type?utm_source=github.com&utm_medium=referral&utm_content=vaclavlahuta/media-type&utm_campaign=Badge_Coverage)
+
 **This module uses ESM import/export and requires Node v8.15.0+ with the `--experimental-modules`
 flag. Please see [Node's documentation](https://nodejs.org/api/esm.html#esm_enabling)
 for details.**
